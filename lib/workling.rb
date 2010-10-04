@@ -164,6 +164,11 @@ module Workling
 
     return nil unless File.exists?(config_path)
 
+    yaml_config= YAML.load(ERB.new(IO.read(config_path)).result)
+    config_name = (yaml_config[env] ? env : (yaml_config['development'] ? 'development' : 'default'))
+    config=yaml_config[config_name]
+    raise "Can't find a configuration for the environments #{env}, development or default" unless config
+
     @@config ||= YAML.load_file(config_path)[env || 'development'].symbolize_keys
     @@config[:memcache_options].symbolize_keys! if @@config[:memcache_options]
     @@config

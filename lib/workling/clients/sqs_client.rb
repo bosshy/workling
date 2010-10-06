@@ -38,16 +38,21 @@ module Workling
       end
 
       def self.load
-        begin
-          require 'right_aws'
-        rescue Exception => e
           raise WorklingError.new(
                   "WORKLING: couldn't find the ruby aws client - you need it for the sqs runner. " \
  "Install it with sudo gem install right_aws "
-          )
-        end
+          ) unless installed?
       end
 
+      def self.installed?
+        begin
+          gem 'right_aws'
+          require 'right_aws'
+        rescue LoadError
+        end
+
+        Object.const_defined? "RightAws"
+      end
       # Mainly exposed for testing purposes
       attr_reader :sqs_options
       attr_reader :messages_per_req

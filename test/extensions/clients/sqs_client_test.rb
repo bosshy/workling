@@ -20,6 +20,22 @@ context "The SQS client" do
     @client.stubs(:env).returns('test')
     @client.connect
   end
+
+  context "loading" do
+ 
+    specify "should be installed" do
+      Workling::Clients::SqsClient.installed?.should == true
+    end
+
+    specify "should be able to load" do
+      lambda { Workling::Clients::SqsClient.load}.should.not.raise
+    end
+
+    specify "should raise on load if not installed" do
+      Workling::Clients::SqsClient.stubs(:installed?).returns(false)
+      lambda { Workling::Clients::SqsClient.load}.should.raise Workling::WorklingError
+    end
+  end
   
   context "when connecting" do
 

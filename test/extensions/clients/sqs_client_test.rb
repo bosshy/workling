@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
+require 'right_aws'
 
 context "The SQS client" do
 

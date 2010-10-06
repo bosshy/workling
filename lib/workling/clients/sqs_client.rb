@@ -1,5 +1,4 @@
 require 'json'
-require 'right_aws'
 
 #
 #  An SQS client
@@ -37,7 +36,18 @@ module Workling
         DEFAULT_VISIBILITY_TIMEOUT = 30
         DEFAULT_VISIBILITY_RESERVE = 10
       end
-      
+
+      def self.load
+        begin
+          require 'right_aws'
+        rescue Exception => e
+          raise WorklingError.new(
+                  "WORKLING: couldn't find the ruby aws client - you need it for the sqs runner. " \
+ "Install it with sudo gem install right_aws "
+          )
+        end
+      end
+
       # Mainly exposed for testing purposes
       attr_reader :sqs_options
       attr_reader :messages_per_req

@@ -11,11 +11,7 @@ require_in_tree 'extensions/cattr_accessor' unless Class.respond_to?(:cattr_acce
 gem 'activesupport'
 require 'active_support/inflector'
 require 'active_support/core_ext/hash/keys'
-
-class Hash #:nodoc:
-  include ActiveSupport::CoreExtensions::Hash::Keys
-end
-
+require 'erb'
 require 'yaml'
 
 module Workling
@@ -36,16 +32,16 @@ module Workling
   end
 
   def self.path(*args)
-    if defined?(RAILS_ROOT)
-      File.join(RAILS_ROOT, *args)
+    if defined?(Rails)
+      File.join(Rails.root, *args)
     else
       File.join(Dir.pwd, *args)
     end
   end
 
   def self.env
-    @env ||= if defined?(RAILS_ENV)
-               RAILS_ENV.to_s
+    @env ||= if defined?(Rails)
+               Rails.env.to_s
              elsif defined?(RACK_ENV)
                RACK_ENV.to_s
              end
@@ -177,7 +173,7 @@ module Workling
   mattr_writer :config_path
   def self.config_path
     return @@config_path if defined?(@@config_path) && @@config_path
-    @@config_path = File.join(RAILS_ROOT, 'config', 'workling.yml')
+    @@config_path = Rails.root.join('config', 'workling.yml').to_s
   end
 
   #

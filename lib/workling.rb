@@ -183,7 +183,11 @@ module Workling
   mattr_writer :raise_exceptions
   def raise_exceptions
     return @@raise_exceptions if defined?(@@raise_exceptions)
-    @@raise_exceptions = (RAILS_ENV == "test" || RAILS_ENV == "development")
+    if defined?(Rails)
+      @@raise_exceptions = (Rails.env == "test" || Rails.env == "development")
+    else
+      @@raise_exceptions = false
+    end
   end
 
   def self.raise_exceptions?

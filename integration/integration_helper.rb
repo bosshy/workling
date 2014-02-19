@@ -4,10 +4,17 @@ gem 'activesupport'
 require 'active_support'
 
 require 'test/spec'
+require 'pathname'
+module Rails
+  def self.env; "test"; end
+  def self.root; ::Pathname.new(File.dirname(__FILE__) + "/.."); end
+  def self.logger; ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/../test.log"); end
+end
+#RAILS_ENV = "test"
+#RAILS_ROOT = File.dirname(__FILE__) + "/.." # fake the rails root directory.
+#RAILS_DEFAULT_LOGGER = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/../test.log")
 
-RAILS_ENV = "test"
-RAILS_ROOT = File.dirname(__FILE__) + "/.." # fake the rails root directory.
-RAILS_DEFAULT_LOGGER = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/../test.log")
+
 
 require File.join(File.dirname(__FILE__), "../lib/workling")
 

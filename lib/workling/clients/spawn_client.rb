@@ -28,7 +28,8 @@ module Workling
       cattr_writer :options
       def self.options
         # use thread for development and test modes. easier to hunt down exceptions that way.
-        @@options ||= { :method => (RAILS_ENV == "test" || RAILS_ENV == "development" ? :fork : :thread) }
+        test_env = defined?(Rails) && (Rails.env == "test" || Rails.env == "development")
+        @@options ||= { :method => (test_env ? :fork : :thread) }
       end
 
       include Spawn if installed?

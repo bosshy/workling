@@ -181,7 +181,7 @@ module Workling
   #  logger.error. it's easy to miss these log calls while developing, though. 
   #
   mattr_writer :raise_exceptions
-  def raise_exceptions
+  def self.raise_exceptions
     return @@raise_exceptions if defined?(@@raise_exceptions)
     if defined?(Rails)
       @@raise_exceptions = (Rails.env == "test" || Rails.env == "development")
@@ -191,7 +191,7 @@ module Workling
   end
 
   def self.raise_exceptions?
-    @@raise_exceptions
+    self.raise_exceptions
   end
 
   private
